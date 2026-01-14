@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useAccelerometer } from '../lib/modules/sensors/accelerometer/useAccelerometer';
+import { useAccelerometer } from '@/lib/modules/sensors/accelerometer/UseAccelerometer';
 import { generateRandomNumber } from '@/lib/core/logic/motion';
 import { MIN_NUMBER, MAX_NUMBER } from '@/lib/core/logic/constants';
 import { NumberDisplay } from '@/components/atoms/NumberDisplay';
