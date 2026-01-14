@@ -1,53 +1,51 @@
-> Edited for use in IDX on 07/09/12
+App de Azar con Motor 3D (E217)
 
-# Welcome to your Expo app 👋
+1. Descripción General
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+La aplicación E217 - Juegos de Azar es una plataforma móvil desarrollada con Expo y React Native que permite a los usuarios interactuar con elementos de juego mediante el movimiento físico del dispositivo. La funcionalidad principal consiste en un sistema de lanzamiento de dados impulsado por hardware, donde el usuario agita su teléfono para generar resultados aleatorios en un entorno tridimensional.
 
-## Get started
+2. Implementaciones Técnicas Principales
 
-#### Android
+A. Motor de Movimiento (Acelerómetro)
 
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
+Se implementó un sistema de detección de movimiento mediante expo-sensors.
 
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
+Lógica de "Shake": Se desarrolló un algoritmo que calcula la magnitud del vector de aceleración ($\sqrt{x^2 + y^2 + z^2}$) y lo compara con un umbral de fuerza (threshold) para evitar falsos positivos.
 
-In the output of this command/task, you'll find options to open the app in a
+Sistema de Cooldown: Se implementó un bloqueo de 1 segundo entre lanzamientos para asegurar la estabilidad de la lógica del juego.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+B. Renderizado 3D (React Three Fiber)
 
-You'll also find options to open the app's developer menu, reload the app, and more.
+Se integró Three.js a través de @react-three/fiber/native para renderizar un dado interactivo.
 
-#### Web
+Interconectividad: El dado no es solo visual; su rotación en los ejes X e Y responde en tiempo real a la inclinación del dispositivo mediante el hook useFrame.
 
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
+Gráficos Nativo: Se configuró expo-gl como el puente para permitir gráficos de alto rendimiento en el entorno móvil.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+C. Arquitectura Modular (Regla de 150 Líneas)
 
-## Get a fresh project
+Para optimizar el rendimiento y cumplir con los requisitos académicos de limpieza de código, se realizó una refactorización profunda:
 
-When you're ready, run:
+Separación de Estilos: Todos los StyleSheet fueron movidos a archivos .styles.ts.
 
-```bash
-npm run reset-project
-```
+Atomic Design: Se dividieron los componentes en Atoms (botones, visualizadores) y Molecules (el objeto 3D).
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Hooks Personalizados: La lógica de sensores se extrajo de la UI para mantener los archivos de vista por debajo del límite estricto de 150 líneas de código.
 
-## Learn more
+3. Modificaciones Realizadas
 
-To learn more about developing your project with Expo, look at the following resources:
+Migración de 2D a 3D: Se reemplazó el visualizador de texto plano por un Canvas tridimensional.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Corrección de Entorno: Se resolvieron conflictos de dependencias en Project IDX mediante la instalación manual de expo-gl y expo-sensors.
 
-## Join the community
+Optimización de Memoria: Se implementó un sistema de limpieza (cleanup) en los listeners de los sensores para prevenir fugas de memoria (memory leaks).
 
-Join our community of developers creating universal apps.
+4. Resultados Finales
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Interfaz Fluida: Logramos una tasa de refresco constante en el dado 3D mientras el acelerómetro está activo.
+
+Precisión: El generador de números aleatorios está sincronizado con la animación de "agitado", proporcionando una respuesta táctil y visual coherente.
+
+Código Calificable: El 100% de los archivos del proyecto cumplen con la norma de brevedad (menos de 150 líneas), facilitando el mantenimiento y la escalabilidad futura para nuevos juegos de azar.
+
+Desarrollado en Project IDX con React Native, Three.js y Expo.
